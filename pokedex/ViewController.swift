@@ -106,6 +106,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
+        
         var poke: Pokemon!
         
         if inSearchMode {
@@ -113,8 +114,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         } else {
             poke = pokemon[indexPath.row]
         }
+        self.performSegueWithIdentifier("PokemonDetailVC", sender: poke)
+       
         
-        performSegueWithIdentifier("PokemonDetailVC", sender: poke)
         
     }
     

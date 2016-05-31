@@ -24,14 +24,48 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet weak var evoLbl: UILabel!
     @IBOutlet weak var currentEvoImg: UIImageView!
     @IBOutlet weak var nextEvoImg: UIImageView!
+    @IBOutlet weak var loadingIcon: UIActivityIndicatorView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadingIcon.startAnimating()
+        pokemon.downloadPokemonDetails { 
+            self.updateUI()
+            self.loadingIcon.stopAnimating()
+        }
 
+    }
+    
+    
+
+    func updateUI() {
         namelbl.text = pokemon.name.capitalizedString
         pokemonImage.image = UIImage(named: "\(pokemon.pokedexId)")
+        pokedexLbl.text = "\(pokemon.pokedexId)"
+        currentEvoImg.image = pokemonImage.image
+        defenceLbl.text = "\(pokemon.defense)"
+        baseAttackLbl.text = "\(pokemon.baseAttack)"
+        heightLbl.text = pokemon.height
+        weightLbl.text = pokemon.weight
+        descLbl.text = pokemon.description
+        typeLbl.text = pokemon.type
+        
+        if pokemon.nextEvolutionId == "" {
+            evoLbl.text = "No Evolutions"
+            nextEvoImg.hidden = true
+            currentEvoImg.hidden = true
+        } else {
+            nextEvoImg.hidden = false
+            nextEvoImg.image = UIImage(named: pokemon.nextEvolutionId)
+            var str = "Next Evolution: \(pokemon.nextEvolutionName)"
+            
+            if pokemon.nextEvolutionLv != "" {
+                str += " - Level \(pokemon.nextEvolutionLv)"
+            }
+            evoLbl.text = str
+        }
     }
-
     
     @IBAction func onBackButtonPressed(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
